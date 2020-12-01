@@ -5,7 +5,7 @@ import { API } from "../config";
 const Home = () => {
   return (
     <Layout title="Claritin" description="Node React E-commerce App">
-      {API}
+      ...
     </Layout>
   );
 };
