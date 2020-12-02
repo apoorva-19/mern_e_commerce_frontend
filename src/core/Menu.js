@@ -42,6 +42,30 @@ const Menu = ({ history }) => {
                 Home
               </Link>
             </li>
+            {isAuthenticated() && isAuthenticated().user.role === 0 && (
+              <li className="nav-item mr-sm-2">
+                {/* to is similar to href in the anchor tag */}
+                <Link
+                  className="nav-link"
+                  style={isActive(history, "/user/dashboard")}
+                  to="/user/dashboard"
+                >
+                  Dashboard
+                </Link>
+              </li>
+            )}
+            {isAuthenticated() && isAuthenticated().user.role === 1 && (
+              <li className="nav-item mr-sm-2">
+                {/* to is similar to href in the anchor tag */}
+                <Link
+                  className="nav-link"
+                  style={isActive(history, "/admin/dashboard")}
+                  to="/admin/dashboard"
+                >
+                  Dashboard
+                </Link>
+              </li>
+            )}
             {!isAuthenticated() && (
               <>
                 <li className="nav-item mr-sm-2">

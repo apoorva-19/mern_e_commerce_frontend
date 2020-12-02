@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Redirect } from "react-router-dom";
+import { Redirect, useLocation } from "react-router-dom";
 import Layout from "../core/Layout";
-import { signin, authenticate } from "../auth";
+import { signin, authenticate, isAuthenticated } from "../auth";
 
 const Signin = () => {
   const [values, setValues] = useState({
@@ -13,8 +13,12 @@ const Signin = () => {
   });
 
   const { email, password, error, loading, redirectToReferrer } = values;
-
+  const { user } = isAuthenticated();
+  let location = useLocation();
   const handleChange = (name) => (event) => {
+    if (location.state?.alert) {
+      location.state.alert = false;
+    }
     setValues({ ...values, error: false, [name]: event.target.value });
   };
 
@@ -76,9 +80,25 @@ const Signin = () => {
 
   const redirectUser = () => {
     if (redirectToReferrer) {
+      if (user && user.role === 1) {
+        return <Redirect to="/admin/dashboard" />;
+      } else {
+        return <Redirect to="/user/dashboard" />;
+      }
+    }
+    if (isAuthenticated()) {
       return <Redirect to="/" />;
     }
   };
+
+  function DashboardRedirectAlert() {
+    if (location.state?.alert) {
+      return <div className="alert alert-warning">Please Signin first</div>;
+    } else {
+      return <></>;
+    }
+  }
+
   return (
     <Layout
       title="Signin"
@@ -87,6 +107,7 @@ const Signin = () => {
     >
       {showLoading()}
       {showError()}
+      <DashboardRedirectAlert />
       {signInForm()}
       {redirectUser()}
     </Layout>
